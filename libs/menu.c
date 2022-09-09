@@ -1,21 +1,23 @@
 // menu choices
-#define MENU_CHOICE_1 1
-#define MENU_CHOICE_2 2
-#define MENU_CHOICE_3 3
-#define MENU_CHOICE_4 4
-#define MENU_CHOICE_5 5
-#define MENU_CHOICE_6 6
-#define MENU_CHOICE_7 7
-#define MENU_CHOICE_8 8
+#define CREATE_ACCOUNT 1
+#define DEPOSIT 2
+#define WITHDRAW 3
+#define TRANSFER 4
+#define DELETE 5
+#define SHOW_ACCOUNT 6
+#define SHOW_ACCOUNTS 7
+#define EXIT_MENU 8
 #define BACK_TO_MENU -1
 
 // prompts
 #define AMMOUNT_PROMPT "Enter the ammount: "
 #define PROMPT_ACCOUNT_NUMBER "Enter the account number of the account : "
 #define CONFIRMATION_PROMPT "CONFIRM ? y/n"
+#define PROMPT_CONFIRM_DELETION "Are you sure you want delete this account Y/n? "
 // messages
 #define MSG_ADDED_ACCOUNT "Account Added successfully"
 #define MSG_OPERATION_DONE "Operation done successfully"
+#define MSG_REMOVED_ACC "Account removed successfully..."
 // errors messages
 #define ERR_WRONG_INPUT "Wrong input !!"
 #define ERR_OOR "OUT OF RANGE !!"
@@ -159,7 +161,8 @@ step_1:
     system(CLS);
     puts("|Select Sender|");
     int selectedSender = selectFromTable();
-    if (selectedSender == BACK_TO_MENU){
+    if (selectedSender == BACK_TO_MENU)
+    {
         return;
     }
 
@@ -169,15 +172,16 @@ step_2:
     printaccTable(accs.elements[selectedSender]);
     puts("|Select Receiver|");
     int selectedReceiver = selectFromTable();
-    if (selectedReceiver == BACK_TO_MENU){
+    if (selectedReceiver == BACK_TO_MENU)
+    {
         goto step_1;
     }
 
-    if (selectedReceiver == selectedSender){
+    if (selectedReceiver == selectedSender)
+    {
         goto step_2;
     }
 
-    
     system(CLS);
     printf("Sender >>");
     printaccTable(accs.elements[selectedSender]);
@@ -205,6 +209,28 @@ step_2:
     }
 }
 
+void showRemoveView()
+{
+    system(CLS);
+    int selected = selectFromTable();
+    if (selected == BACK_TO_MENU)
+        return;
+    system(CLS);
+    printacc(accs.elements[selected]);
+    printf(PROMPT_CONFIRM_DELETION);
+    char confirmationChar = getchar();
+    if (confirmationChar == 'y' || confirmationChar == 'Y')
+    {
+        removeElement(&accs, accs.elements[selected]);
+        puts(MSG_REMOVED_ACC);
+        writeData(accs);
+    }
+    else
+    {
+        puts("Aborting...");
+    }
+}
+
 void Menu()
 {
     printMenu();
@@ -213,31 +239,32 @@ void Menu()
     getInt(&input);
     switch (input)
     {
-    case MENU_CHOICE_1:
+    case CREATE_ACCOUNT:
         system(CLS);
         account newacc = createAccount();
         addElement(&accs, newacc);
         writeData(accs);
         puts(MSG_ADDED_ACCOUNT);
         break;
-    case MENU_CHOICE_2:
+    case DEPOSIT:
         system(CLS);
         selectOperate(deposit);
         break;
-    case MENU_CHOICE_3:
+    case WITHDRAW:
         system(CLS);
         selectOperate(withdraw);
         break;
-    case MENU_CHOICE_4:
+    case TRANSFER:
         showTransferView();
-    case MENU_CHOICE_5:
+    case DELETE:
+        showRemoveView();
 
         break;
-    case MENU_CHOICE_6:
+    case SHOW_ACCOUNT:
         break;
-    case MENU_CHOICE_7:
+    case SHOW_ACCOUNTS:
         break;
-    case MENU_CHOICE_8:
+    case EXIT_MENU:
         puts("quitting...");
         exit(EXIT_SUCCESS);
         break;
