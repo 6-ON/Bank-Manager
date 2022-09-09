@@ -42,10 +42,10 @@ void getInt(int *val)
     {
         char buff[255];
         fgets(buff, sizeof(buff), stdin);
-        if (sscanf(buff, "%d", &val) == WRONG_INPUT)
+        if (sscanf(buff, "%d", val) == WRONG_INPUT)
         {
             puts(ERR_WRONG_INPUT);
-            printf(">> ");
+            printf("|>> ");
             continue;
         }
         break;
@@ -58,7 +58,7 @@ void getDouble(double *val)
     {
         char buff[255];
         fgets(buff, sizeof(buff), stdin);
-        if (sscanf(buff, "%lf", &val) == WRONG_INPUT)
+        if (sscanf(buff, "%lf", val) == WRONG_INPUT)
         {
             puts(ERR_WRONG_INPUT);
             printf(">> ");
@@ -72,7 +72,7 @@ int selectFromTable()
 {
     printAccountsTable(accs); // print Table
     puts("<-- 0 ");           // add 0
-prompt:
+prompt:;
     int index;
     printf(">> ");
     getInt(&index); // prompt index and set it
@@ -92,15 +92,15 @@ prompt:
 
 void operate(int (*operation)(account *, double), int _index)
 {
-restart:
+restart:;
     double ammDeposit;
     printf(AMMOUNT_PROMPT);
     getDouble(&ammDeposit);
 
     if (ammDeposit < 0)
     {
-        goto restart;
         puts(ERR_NEGATIVE_AMMOUT);
+        goto restart;
     }
     else
     {
@@ -126,15 +126,15 @@ void selectOperate(int (*operation)(account *, double))
 {
     int selected;
     selected = selectFromTable();
-    system(CLS);
-    printacc(accs.elements[selected]);
 
     switch (selected)
     {
     case BACK_TO_MENU:
-        return;
+        // return;
         break;
     default:
+        system(CLS);
+        printacc(accs.elements[selected]);
         operate(operation, selected);
         break;
     }
@@ -155,11 +155,13 @@ void printMenu()
 
 void showTransferView()
 {
+step_1:
     system(CLS);
     puts("|Select Sender|");
     int selectedSender = selectFromTable();
-    if (!(selectedSender + 1))
+    if (selectedSender == BACK_TO_MENU){
         return;
+    }
 
 step_2:
     system(CLS);
@@ -167,23 +169,26 @@ step_2:
     printaccTable(accs.elements[selectedSender]);
     puts("|Select Receiver|");
     int selectedReceiver = selectFromTable();
-    if (!(selectedReceiver + 1))
-        return;
-    if (selectedReceiver == selectedSender)
+    if (selectedReceiver == BACK_TO_MENU){
+        goto step_1;
+    }
+
+    if (selectedReceiver == selectedSender){
         goto step_2;
+    }
+
+    
     system(CLS);
     printf("Sender >>");
     printaccTable(accs.elements[selectedSender]);
 
     printf("Receiver >>");
     printaccTable(accs.elements[selectedReceiver]);
-    printf(AMMOUNT_PROMPT);
+    printf("\n" AMMOUNT_PROMPT);
 
     double ammount;
 
     getDouble(&ammount);
-
-    printf("enter a valid number>> ");
 
     switch (transfer(accs.elements + selectedSender, accs.elements + selectedReceiver, ammount))
     {
