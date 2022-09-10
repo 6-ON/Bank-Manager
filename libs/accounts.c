@@ -40,6 +40,7 @@ void accountcpy(account *dest, account src)
         dest->holder_name = malloc(strlen(src.holder_name));
     else
         dest->holder_name = realloc(dest->holder_name, sizeof(char) * strlen(src.holder_name));
+    strcpy(dest->holder_name,src.holder_name);
     dest->ammount = src.ammount;
 }
 
@@ -135,7 +136,7 @@ signed int removeElement(AccountsList *acl, account acc)
     }
     else
     {
-        removeElementAt(acl,index);
+        removeElementAt(acl,_index);
     }
 }
 
@@ -148,7 +149,7 @@ signed int removeElementAt(AccountsList *acl, int _index)
     }
     // rearrenge the elements to pop the last element
     // lenght-1 to stop at second last element to prevent going out of range
-    for (int i = index; i < acl->length - 1; i++)
+    for (int i = _index; i < acl->length - 1; i++)
     {
         accountcpy(acl->elements + i, acl->elements[i + 1]);
     }
