@@ -49,6 +49,8 @@ void popElement(AccountsList *acl);
 
 signed int removeElement(AccountsList *acl,account acc);
 
+signed int removeElementAt(AccountsList *acl, int _index);
+
 signed int indexOfAccount(AccountsList acl , account acc);
 
 #endif

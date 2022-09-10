@@ -23,7 +23,7 @@ account _init_account(char *accn, char *acch, double amm)
 
     strcpy(acc.account_number, accn);
 
-    acc.holder_name = malloc(strlen(acch)+1);
+    acc.holder_name = malloc(strlen(acch) + 1);
     strcpy(acc.holder_name, acch);
 
     acc.ammount = amm;
@@ -54,7 +54,6 @@ void printaccTable(account ac)
 {
     printf("|| Account Number :%s | Holder Name : %s | Ammount : %f MAD ||\n", ac.account_number, ac.holder_name, ac.ammount);
 }
-
 
 // compare two accounts
 // returns ture if thier account number match, false if not
@@ -126,31 +125,37 @@ void popElement(AccountsList *acl)
 }
 
 // removes an account from an accountList if found otherwise returns -1
-signed int removeElement(AccountsList *acl,account acc)
+signed int removeElement(AccountsList *acl, account acc)
 {
-    //steps detect account if exits 
-    signed int index = indexOfAccount(*acl,acc);
-    if (index==NOT_FOUND)
+    // steps detect account if exits
+    signed int _index = indexOfAccount(*acl, acc);
+    if (_index == NOT_FOUND)
     {
         return NOT_FOUND;
     }
     else
     {
-        // rearrenge the elements to pop the last element
-        // lenght-1 to stop at second last element to prevent going out of range
-        for (int i = index; i < acl->length-1; i++)
-        {
-            accountcpy(acl->elements+i,acl->elements[i+1]);
-        }
-        //remove the last element
-        popElement(acl);
-        return index;
+        removeElementAt(acl,index);
     }
-    
-
-
 }
 
+// removes an account from an accountList if found otherwise returns -1
+signed int removeElementAt(AccountsList *acl, int _index)
+{
+    if (_index + 1 > acl->length || _index < 0)
+    {
+        return NOT_FOUND;   
+    }
+    // rearrenge the elements to pop the last element
+    // lenght-1 to stop at second last element to prevent going out of range
+    for (int i = index; i < acl->length - 1; i++)
+    {
+        accountcpy(acl->elements + i, acl->elements[i + 1]);
+    }
+    // remove the last element
+    popElement(acl);
+    return 0;
+}
 // returns the index of the given account
 // returns -1 if not found
 // NOTE : it matches the account number only
