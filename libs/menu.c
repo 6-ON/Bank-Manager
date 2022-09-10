@@ -219,6 +219,7 @@ void showRemoveView()
     printacc(accs.elements[selected]);
     printf(PROMPT_CONFIRM_DELETION);
     char confirmationChar = getchar();
+    getchar(); // remove \n from stdin buffer
     if (confirmationChar == 'y' || confirmationChar == 'Y')
     {
         removeElement(&accs, accs.elements[selected]);
