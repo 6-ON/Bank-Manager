@@ -120,7 +120,7 @@ account createAccount()
 	{
 		printf(PROMPT_AMMOUNT);
 		fgets(acc_ammount_buff, sizeof(acc_ammount_buff), stdin);
-		if (sscanf(acc_ammount_buff, "%lf", &initAmmount) != 1)
+		if (sscanf(acc_ammount_buff, "%lf", &initAmmount) != 1 || initAmmount < 0)
 		{
 			puts(ERR_INALID_AMMOUNT);
 			continue;
