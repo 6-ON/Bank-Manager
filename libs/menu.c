@@ -94,19 +94,19 @@ prompt:;
 
 void operate(int (*operation)(account *, double), int _index)
 {
-restart:;
-    double ammDeposit;
+restart:
     printf(AMMOUNT_PROMPT);
-    getDouble(&ammDeposit);
+    double operationAmmount;
+    getDouble(&operationAmmount);
 
-    if (ammDeposit < 0)
+    if (operationAmmount < 0)
     {
         puts(ERR_NEGATIVE_AMMOUT);
         goto restart;
     }
     else
     {
-        int rslt = operation(accs.elements + _index, ammDeposit);
+        int rslt = operation(accs.elements + _index, operationAmmount);
         switch (rslt)
         {
         case SUCCESS:
